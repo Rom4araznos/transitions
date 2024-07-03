@@ -1,6 +1,7 @@
 #include "transitions.hpp"
 #include "number.hpp"
 #include "utils.hpp"
+#include <cassert>
 #include <cmath>
 
 namespace lx {
@@ -8,35 +9,20 @@ namespace lx {
 
     auto cubic_bezier(f32 t, vec2f p0, vec2f p1, vec2f p2, vec2f p3) -> f32 {
 
-        f32 u = 1 - t;
-        f32 tt = t * t;
-        f32 uu = u * u;
-        f32 uuu = uu * u;
-        f32 ttt = tt * t;
+        assert(t <= 1 && "t can't be more than 1");
 
         vec2f p;
 
-        // (1 - t)^3 * p0
-        p.x = uuu * p0.x;
+        p.y = std::pow(1 - t, 3) * p0.y + 3 * std::pow(1 - t, 2) * t * p1.y +
+              3 * (1 - t) * std::pow(t, 2) * p2.y + std::pow(t, 3) * p3.y;
 
-        // 3 * (1 - t)^2 * t * p1
-        p.x += 3 * uu * t * p1.x;
-
-        // 3 * (1 - t) * t^2 * p2
-        p.x += 3 * u * tt * p2.x;
-
-        // t^3 * p3
-        p.x += ttt * p3.x;
-
-        p.y = uuu * p0.y;
-        p.y += 3 * uu * t * p1.y;
-        p.y += 3 * u * tt * p2.y;
-        p.y += ttt * p3.y;
 
         return p.y;
     }
 
     auto linear(u16 max, u16 current) -> f32 {
+
+        assert(current > max && "current can't be more than max");
 
         return f32(current) / max;
     }
