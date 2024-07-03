@@ -1,11 +1,15 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.16)
 
-project(Transitions LANGUAGE CXX)
+project(Transitions LANGUAGES CXX VERSION 1.0.0)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_library(transitions STATIC src/transitions.cpp)
 
-# include(cmake/CPM.cmake)
+target_include_directories(transitions PUBLIC src)
 
-# CPMAddPackage("gh:doctest/doctest#v2.4.11")
+add_subdirectory(tests)
+
+
 
 
